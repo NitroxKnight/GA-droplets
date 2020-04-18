@@ -10,11 +10,12 @@ from PIL import Image
 # |
 # v
 # x
+# such that D[px,py] can be written and a image can be viewed from it easily
 
 nx,ny = 720,1280 #resolution of simulation
 nx_out,ny_out = 1440,2560 #resolution of video produced
 
-#functions for conversiont to image of a video
+#functions for convertion to a simulation frame to frame of the video
 resize = lambda x: np.array(Image.fromarray(x).resize((ny_out,nx_out)))
 to_img = lambda x: resize((x.copy()[:,:,None]*255*np.ones((1,1,3))).astype(np.uint8))
 
@@ -46,12 +47,11 @@ try:
         Ddown /= Dsum
         Dmiddle /= Dsum
         Dup /= Dsum
-        p = np.array([Ddown,Dmiddle,Dup])
+        p = np.array([Ddown,Dmiddle,Dup]) #probablility 
 
         u = np.random.uniform(size=N)
         down = (u<Ddown).astype(int)
         up = (u>(1-Dup)).astype(int)
-    #     print(down-up)
 
         px += down-up
         py %= ny
